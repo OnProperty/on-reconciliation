@@ -1,0 +1,9 @@
+mode: ContinuousDeployment
+branches:
+  feature:
+    tag: beta-{BranchName}
+  hotfix:
+    tag: beta-{BranchName}
+ignore:
+  sha: []
+merge-message-formats: {}
