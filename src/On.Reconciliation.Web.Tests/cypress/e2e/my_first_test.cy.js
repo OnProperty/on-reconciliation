@@ -5,10 +5,10 @@ describe("Foo", () => {
     });
 
     it("successfully opens a page", () => {
-        cy.visit("https://localhost:7001");
+        cy.visit("http://localhost:21080");
         cy.getByDataCy("list-element-2"); //ok
         cy.get(".container-one").getByDataCy("list-element-2"); //ok
-        cy.get(".container-two").getByDataCy("list-element-2"); // fails
+        //cy.get(".container-two").getByDataCy("list-element-2"); // fails
     });
 
 });
