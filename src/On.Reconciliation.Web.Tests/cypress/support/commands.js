@@ -23,3 +23,12 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('getByDataCy', { prevSubject: 'optional' }, (subject, dataCy) => {
+    let selector = `[data-cy="${dataCy}"]`;
+    if (subject) {
+        return cy.get(selector, { withinSubject: subject });
+    } else {
+        return cy.get(selector);
+    }    
+});
