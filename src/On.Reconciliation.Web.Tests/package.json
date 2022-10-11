@@ -1,0 +1,17 @@
+{
+  "name": "On.Reconciliation.Web.Tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx cypress open",
+    "test:teamcity": "npx cypress run --reporter teamcity"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^10.9.0",
+    "cypress-teamcity-reporter": "^3.0.0"
+  }
+}
