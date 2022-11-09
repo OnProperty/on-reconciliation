@@ -1,3 +1,5 @@
+using System.Data;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace On.Reconciliation.Api.Controllers;
@@ -12,10 +14,12 @@ public class WeatherForecastController : ControllerBase
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
+    private readonly IDbConnection _dbConnection;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IDbConnection dbConnection)
     {
         _logger = logger;
+        _dbConnection = dbConnection;
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
@@ -30,5 +34,12 @@ public class WeatherForecastController : ControllerBase
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+    }
+
+    [HttpGet("Foo")]
+    public IEnumerable<string> Foo()
+    {
+        var query = @"SELECT TOP 10 BankAccount FROM EC_BankAccount";
+        return _dbConnection.Query<string>(query);
     }
 }
