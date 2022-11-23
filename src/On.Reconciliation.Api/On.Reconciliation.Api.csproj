@@ -18,4 +18,8 @@
         <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\On.Reconciliation.Models\On.Reconciliation.Models.csproj" />
+    </ItemGroup>
+
 </Project>
