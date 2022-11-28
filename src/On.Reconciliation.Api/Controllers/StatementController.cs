@@ -7,17 +7,20 @@ namespace On.Reconciliation.Api.Controllers;
 public class StatementController
 {
     private readonly IStatementQueries _statementQueries;
+    private readonly IAccountingClientQueries _accountingClientQueries;
 
-    public StatementController(IStatementQueries statementQueries)
+    public StatementController(IStatementQueries statementQueries, IAccountingClientQueries accountingClientQueries)
     {
         _statementQueries = statementQueries;
+        _accountingClientQueries = accountingClientQueries;
     }
     
     //TODO: auth 
     //TODO: verify access to client
     [HttpGet]
-    public async Task<StatementViewModel> GetByAccountingClientId()
+    public IEnumerable<StatementViewModel> GetByAccountingClientId([FromQuery]string bankAccount)
     {
-        throw new NotImplementedException();
+        var statements = _statementQueries.GetAllOpenStatements(bankAccount);
+        return statements.Select(x => x.ToViewModel());
     }
 }

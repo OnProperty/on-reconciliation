@@ -1,0 +1,33 @@
+﻿@page "/statements"
+@using On.Reconciliation.Models.ViewModels
+@inject HttpClient Http
+
+<PageTitle>Bankavstemming</PageTitle>
+
+<h1>Bank statements for #ACCOUNT#</h1>
+
+@if (statements == null)
+{
+    <p><em>Laster...</em></p>
+}
+else
+{
+    <div style="max-width:800px">
+    @foreach (var statement in statements)
+    {
+        <Statement Data=@statement />
+    }
+    </div>
+}
+
+@code {
+    private StatementViewModel[]? statements;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        statements = (await Http.GetFromJsonAsync<StatementViewModel[]>("sample-data/statements.json"))?
+            .OrderByDescending(x => x.Date)
+            .ToArray();
+    }
+}
