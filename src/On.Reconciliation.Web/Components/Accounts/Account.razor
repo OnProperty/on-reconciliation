@@ -1,0 +1,27 @@
+﻿@code {
+    [Parameter]
+    public Models.ViewModels.AccountViewModel? Data { get; set; }
+}
+
+@if (Data != null)
+{
+    <div class="account-container">
+        <h2>@Data.BankAccount</h2>
+        <div><span>@Data.NumberOfUnReconciliatedStatements</span> statements</div>
+        <div><span>@Data.NumberOfUnbalancedStatements</span> uten match</div>
+    </div>
+}
+else
+{
+    <p>><em>No account data</em></p>
+}
+
+<style>
+    .account-container {
+        background-color: lightseagreen;
+    }
+    
+    .account-container:not(:last-child) {
+        border-bottom: 1px solid grey;        
+    }
+</style>

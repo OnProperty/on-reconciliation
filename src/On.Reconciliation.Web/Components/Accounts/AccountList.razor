@@ -1,0 +1,36 @@
+﻿@using On.Reconciliation.Models.ViewModels
+@inject HttpClient Http
+
+<h2>Kontoer</h2>
+
+@{
+    if (accounts == null)
+    {
+        <p><em>Laster...</em></p>
+    }
+    else
+    {
+        foreach (var account in accounts)
+        {
+            <Account Data=@account />
+        }
+    }
+}
+
+@code {
+    private AccountViewModel[]? accounts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        accounts = (await Http.GetFromJsonAsync<AccountViewModel[]>("sample-data/accounts.json"))?
+            .ToArray();
+    }
+}
+
+
+<style>
+    h2 {
+        color:  white;
+    }
+</style>

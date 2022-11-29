@@ -17,7 +17,7 @@ public class EC_AccountCurrentBook
     public string? InvoiceNumber { get; set; }
     public DateTime? DueDate { get; set; }
     public int JournalId { get; set; }
-    public decimal? AmountLocalCurrency { get; set; }
+    public double? AmountLocalCurrency { get; set; }
     public int? DimensionProject { get; set; }
     public int AccountingYear { get; set; }
     public int AccountingClientId { get; set; }

@@ -1,0 +1,6 @@
+﻿[
+  {"bankAccount": "1234.56.12345", "numberOfUnReconciliatedStatements": 34, "numberOfUnbalancedStatements": 6},
+  {"bankAccount": "4567.56.12345", "numberOfUnReconciliatedStatements": 56, "numberOfUnbalancedStatements": 0},
+  {"bankAccount": "4123.56.12345", "numberOfUnReconciliatedStatements": 23, "numberOfUnbalancedStatements": 3},
+  {"bankAccount": "7890.56.12345", "numberOfUnReconciliatedStatements": 42, "numberOfUnbalancedStatements": 4}
+]
