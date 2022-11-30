@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "On.Reconciliation.Models", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "On.Reconciliation.Web", "On.Reconciliation.Web\On.Reconciliation.Web.csproj", "{8CD3C79B-150B-4E5A-9559-081146CBEC47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "On.Reconciliation.Core", "On.Reconciliation.Core\On.Reconciliation.Core.csproj", "{62968B80-0751-433B-8324-BCBBC4DC97AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{8CD3C79B-150B-4E5A-9559-081146CBEC47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CD3C79B-150B-4E5A-9559-081146CBEC47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CD3C79B-150B-4E5A-9559-081146CBEC47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62968B80-0751-433B-8324-BCBBC4DC97AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62968B80-0751-433B-8324-BCBBC4DC97AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62968B80-0751-433B-8324-BCBBC4DC97AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62968B80-0751-433B-8324-BCBBC4DC97AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2DBABE81-2A71-40C9-9EE1-2BC9E73F118F} = {EC76E8AD-EFF3-4569-86CC-A28B0A8EF199}

@@ -1,4 +1,4 @@
-﻿namespace On.Reconciliation.Api.Queries;
+﻿namespace On.Reconciliation.Core.Queries;
 
 public interface IAccountingClientQueries
 {

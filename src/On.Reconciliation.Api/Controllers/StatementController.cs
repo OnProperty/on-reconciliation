@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using On.Reconciliation.Api.Queries;
+using On.Reconciliation.Core.Queries;
 using On.Reconciliation.Models.ViewModels;
 
 namespace On.Reconciliation.Api.Controllers;

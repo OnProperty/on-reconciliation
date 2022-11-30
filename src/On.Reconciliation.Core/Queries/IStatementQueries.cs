@@ -2,7 +2,7 @@
 using Dapper;
 using On.Reconciliation.Models.Database;
 
-namespace On.Reconciliation.Api.Queries;
+namespace On.Reconciliation.Core.Queries;
 
 public interface IStatementQueries
 {
