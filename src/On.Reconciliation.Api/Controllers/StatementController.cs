@@ -20,7 +20,7 @@ public class StatementController
     [HttpGet]
     public IEnumerable<StatementViewModel> GetByAccountingClientId([FromQuery]string bankAccount)
     {
-        var statements = _statementQueries.GetAllOpenStatements(bankAccount);
+        var statements = _statementQueries.GetAllUnmatchedEntries(bankAccount);
         return statements.Select(x => x.ToViewModel());
     }
 }

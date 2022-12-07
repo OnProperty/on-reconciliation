@@ -6,7 +6,8 @@ namespace On.Reconciliation.Core.Queries;
 
 public interface IStatementQueries
 {
-    public IEnumerable<(EC_BankStatementEntry? StatementEntry, EC_AccountCurrentBook? BookEntry)> GetAllOpenStatements(string bankAccount);
+    public IEnumerable<(EC_BankStatementEntry? StatementEntry, EC_AccountCurrentBook? BookEntry)> GetAllUnmatchedEntries(string bankAccount);
+    IEnumerable<EC_BankStatementEntry> GetEntriesForDate(string bankAccount, DateOnly date);
 }
 
 public class StatementQueries : IStatementQueries
@@ -19,7 +20,7 @@ public class StatementQueries : IStatementQueries
     }
     
     //TODO: set up db schema versioning for reconciliation tables
-    public IEnumerable<(EC_BankStatementEntry? StatementEntry, EC_AccountCurrentBook? BookEntry)> GetAllOpenStatements(string bankAccount)
+    public IEnumerable<(EC_BankStatementEntry? StatementEntry, EC_AccountCurrentBook? BookEntry)> GetAllUnmatchedEntries(string bankAccount)
     {
         var query = @"SELECT TOP 30 bse.*, bs.*,  FROM EC_BankStatementEntry bse
                       JOIN EC_ReconciliationStatus rs ON rs.BankStatementEntryId = bse.Id
@@ -31,6 +32,21 @@ public class StatementQueries : IStatementQueries
             query,
             map: (statementEntry, bookEntry) => (statementEntry, bookEntry), // maps the two objects into a Tuple
             param: new {});
+
+        return result;
+    }
+
+    public IEnumerable<EC_BankStatementEntry> GetEntriesForDate(string bankAccount, DateOnly date)
+    {
+        var query = "SELECT * FROM EC_BankStatementEntry WHERE BankAccount = @bankAccount AND Timestamp >= @date AND Timestamp <= @dayAfter";
+
+        var result = _connection.Query<EC_BankStatementEntry>(query,
+            new
+            {
+                bankAccount, 
+                date = date.ToDateTime(TimeOnly.MinValue),
+                dayAfter = date.AddDays(1).ToDateTime(TimeOnly.MinValue)
+            });
 
         return result;
     }
