@@ -6,7 +6,7 @@ namespace On.Reconciliation.Core.Queries;
 
 public interface IStatementQueries
 {
-    public IEnumerable<(EC_BankStatementEntry? StatementEntry, EC_AccountCurrentBook? BookEntry)> GetAllUnmatchedEntries(string bankAccount);
+    public IEnumerable<EC_BankStatementEntry> GetAllUnmatchedEntries(string bankAccount);
     IEnumerable<EC_BankStatementEntry> GetEntriesForDate(string bankAccount, DateOnly date);
 }
 
@@ -20,18 +20,17 @@ public class StatementQueries : IStatementQueries
     }
     
     //TODO: set up db schema versioning for reconciliation tables
-    public IEnumerable<(EC_BankStatementEntry? StatementEntry, EC_AccountCurrentBook? BookEntry)> GetAllUnmatchedEntries(string bankAccount)
+    public IEnumerable<EC_BankStatementEntry> GetAllUnmatchedEntries(string bankAccount)
     {
-        var query = @"SELECT TOP 30 bse.*, bs.*,  FROM EC_BankStatementEntry bse
-                      JOIN EC_ReconciliationStatus rs ON rs.BankStatementEntryId = bse.Id
-                      JOIN EC_BankStatement bs ON bs.Id = bse.BankStatementId
-                      JOIN EC_AccountCurrentBook acb ON acb.CurrentBookId = rs.CurrentBookId
-                      WHERE rs.Reconciliated = 0"; //TODO: filter on accountingclient
+        var query = @"SELECT TOP 100 bse.*, bs.*  FROM EC_BankStatementEntry bse
+                      LEFT JOIN EC_Reconciliation rs ON rs.StatementEntryId = bse.Id
+                      LEFT JOIN EC_BankStatement bs ON bs.Id = bse.BankStatementId
+                      WHERE rs.GeneralLedgerId IS NULL
+                      AND bs.BankAccount = @bankAccount";
 
-        var result = _connection.Query<EC_BankStatementEntry?, EC_AccountCurrentBook?, (EC_BankStatementEntry?, EC_AccountCurrentBook?)>(
+        var result = _connection.Query<EC_BankStatementEntry>(
             query,
-            map: (statementEntry, bookEntry) => (statementEntry, bookEntry), // maps the two objects into a Tuple
-            param: new {});
+            param: new { bankAccount });
 
         return result;
     }

@@ -14,14 +14,13 @@ public class StatementViewModel
 
 public static class StatementViewModelExtensions
 {
-    public static StatementViewModel ToViewModel(this (EC_BankStatementEntry? StatementEntry, EC_AccountCurrentBook? BookEntry) statementTuples)
+    public static StatementViewModel ToViewModel(this EC_BankStatementEntry statementEntry)
     {
         return new StatementViewModel()
         {
-            Amount = statementTuples.StatementEntry?.Amount ?? statementTuples.BookEntry?.AmountLocalCurrency,
-            Date = statementTuples.StatementEntry?.Timestamp ?? statementTuples.BookEntry?.DueDate,
-            Description = statementTuples.StatementEntry?.AdditionalInfo ?? statementTuples.BookEntry?.Notes,
-            Status = statementTuples.StatementEntry != null ? ReconciliationStatus.IsInBook : ReconciliationStatus.Unmatched
+            Amount = statementEntry.Amount,
+            Date = statementEntry.Timestamp,
+            Description = statementEntry.AdditionalInfo
         };
     }
 }
