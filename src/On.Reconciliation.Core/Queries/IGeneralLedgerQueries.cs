@@ -7,6 +7,7 @@ namespace On.Reconciliation.Core.Queries;
 public interface IGeneralLedgerQueries
 {
     IEnumerable<EC_GeneralLedger> GetBookEntriesForSingleDay(DateOnly date, string bankAccount);
+    IEnumerable<EC_GeneralLedger> GetBookEntriesForSingleDay(DateTime date, string bankAccount);
 }
 
 public class GeneralLedgerQueries : IGeneralLedgerQueries
@@ -17,7 +18,13 @@ public class GeneralLedgerQueries : IGeneralLedgerQueries
     {
         _connection = connection;
     }
-    
+
+    public IEnumerable<EC_GeneralLedger> GetBookEntriesForSingleDay(DateTime dateTime, string bankAccount)
+    {
+        var day = new DateOnly(dateTime.Year, dateTime.Month, dateTime.Day);
+        return GetBookEntriesForSingleDay(day, bankAccount);
+    }
+
     public IEnumerable<EC_GeneralLedger> GetBookEntriesForSingleDay(DateOnly date, string bankAccount)
     {
         var query = @"SELECT * 

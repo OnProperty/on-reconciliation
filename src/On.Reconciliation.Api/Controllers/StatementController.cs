@@ -18,7 +18,7 @@ public class StatementController
     //TODO: auth 
     //TODO: verify access to client
     [HttpGet]
-    public IEnumerable<StatementViewModel> GetByAccountingClientId([FromQuery]string bankAccount)
+    public IEnumerable<StatementViewModel> GetByBankAccount([FromQuery]string bankAccount)
     {
         var statements = _statementQueries.GetAllUnmatchedEntries(bankAccount);
         return statements.Select(x => x.ToViewModel());

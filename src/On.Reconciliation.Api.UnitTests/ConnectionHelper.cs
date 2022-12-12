@@ -7,6 +7,7 @@ public static class ConnectionHelper
     public static string GetConnectionString =>
         new ConfigurationBuilder()
             .AddUserSecrets<JustToLocateAssembly>()
+            .AddJsonFile("appsettings.json")
             .Build()
             .GetConnectionString("OnPropertyConnectionString");
 }

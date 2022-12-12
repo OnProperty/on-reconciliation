@@ -4,7 +4,7 @@ public class EC_BankStatementEntry
 {
     public int Id { get; set; }
     public int BankStatementId { get; set; }
-    public double Amount { get; set; }
+    public decimal Amount { get; set; }
     public string CurrencyCode { get; set; }
     public DateTime Timestamp { get; set; }
     public string EntryType { get; set; }
