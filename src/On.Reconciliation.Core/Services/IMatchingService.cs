@@ -36,10 +36,6 @@ public class MatchingService : IMatchingService
             var matches = FindMatches(unmatchedEntryGroup.ToList(), ledgerEntries);
             foreach (var match in matches)
                 yield return match;
-
-            var multiMatches = FindMultiMatches(unmatchedEntryGroup.ToList(), ledgerEntries);
-            foreach (var match in multiMatches)
-                yield return match;
         }
     }
 
@@ -106,12 +102,14 @@ public class MatchingService : IMatchingService
 
 public class MatchResult
 {
-    public MatchResult(int bankStatementEntryId, int generalLedgerId)
+    public MatchResult(int bankStatementEntryId, int generalLedgerId, int? ruleId = null)
     {
         BankStatementEntryId = bankStatementEntryId;
         GeneralLedgerId = generalLedgerId;
+        RuleId = ruleId;
     }
     
-    public int BankStatementEntryId { get; set; }
-    public int GeneralLedgerId { get; set; }
+    public int BankStatementEntryId { get; }
+    public int GeneralLedgerId { get; }
+    public int? RuleId { get; }
 }

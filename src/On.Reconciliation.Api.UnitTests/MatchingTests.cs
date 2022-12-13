@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using FluentAssertions;
+using On.Reconciliation.Core.Commands;
 using On.Reconciliation.Core.Queries;
 using On.Reconciliation.Core.Services;
 
@@ -13,6 +14,7 @@ public class MatchingTests
     private readonly StatementQueries _statementQueries;
     private readonly GeneralLedgerQueries _generalLedgerQueries;
     private readonly IMatchingService _matchingService;
+    private readonly ReconciliationCommands _reconciliationCommands;
 
     public MatchingTests()
     {
@@ -20,6 +22,7 @@ public class MatchingTests
 
         _statementQueries = new StatementQueries(connection);
         _generalLedgerQueries = new GeneralLedgerQueries(connection);
+        _reconciliationCommands = new ReconciliationCommands(connection);
 
         _matchingService = new MatchingService(_generalLedgerQueries, _statementQueries);
     }
@@ -42,5 +45,12 @@ public class MatchingTests
         manyToOne[0].BankStatementEntryId.Should().Be(31);
         manyToOne[1].BankStatementEntryId.Should().Be(32);
         manyToOne[2].BankStatementEntryId.Should().Be(33);
+    }
+
+    [Fact]
+    public void Foo()
+    {
+        var matches = _matchingService.AutomatchForBankAccount(BankAccount).ToList();
+        _reconciliationCommands.InsertMatches(matches);
     }
 }
