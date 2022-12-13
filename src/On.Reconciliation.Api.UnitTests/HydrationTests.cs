@@ -23,6 +23,7 @@ public class HydrationTests
     [InlineData(typeof(EC_BankStatementEntry))]
     [InlineData(typeof(EC_AccountCurrentBook))]
     [InlineData(typeof(EC_GeneralLedger))]
+    [InlineData(typeof(EC_ReconciliationRules))]
     public void Get_Model_From_Database_via_Dapper(Type type, string? table = null)
     {
         table ??= type.Name;
