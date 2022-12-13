@@ -22,7 +22,7 @@ public class StatementQueries : IStatementQueries
     //TODO: set up db schema versioning for reconciliation tables
     public IEnumerable<EC_BankStatementEntry> GetAllUnmatchedEntries(string bankAccount)
     {
-        var query = @"SELECT TOP 100 bse.*, bs.*  FROM EC_BankStatementEntry bse
+        var query = @"SELECT bse.*  FROM EC_BankStatementEntry bse
                       LEFT JOIN EC_Reconciliation rs ON rs.BankStatementEntryId = bse.Id
                       LEFT JOIN EC_BankStatement bs ON bs.Id = bse.BankStatementId
                       WHERE rs.GeneralLedgerId IS NULL

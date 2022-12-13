@@ -1,4 +1,6 @@
-﻿using On.Reconciliation.Core.Extensions;
+﻿using System.Data;
+using System.Text.RegularExpressions;
+using On.Reconciliation.Core.Extensions;
 using On.Reconciliation.Core.Queries;
 using On.Reconciliation.Models.Database;
 
@@ -6,7 +8,7 @@ namespace On.Reconciliation.Core.Services;
 
 public interface IMatchingService
 {
-    Task AutomatchForBankAccount(string bankAccount);
+    IEnumerable<MatchResult> AutomatchForBankAccount(string bankAccount);
 }
 
 public class MatchingService : IMatchingService
@@ -20,7 +22,7 @@ public class MatchingService : IMatchingService
         _statementQueries = statementQueries;
     }
     
-    public Task AutomatchForBankAccount(string bankAccount)
+    public IEnumerable<MatchResult> AutomatchForBankAccount(string bankAccount)
     {
         var unmatchedEntries = _statementQueries.GetAllUnmatchedEntries(bankAccount);
         var unmatchedEntryGroups = unmatchedEntries
@@ -29,29 +31,87 @@ public class MatchingService : IMatchingService
 
         foreach (var unmatchedEntryGroup in unmatchedEntryGroups)
         {
-            var ledgerEntries = _generalLedgerQueries.GetBookEntriesForSingleDay(unmatchedEntryGroup.Key, bankAccount);
+            var ledgerEntries = _generalLedgerQueries.GetBookEntriesForSingleDay(unmatchedEntryGroup.Key, bankAccount).ToList();
 
-            FindMatches(unmatchedEntryGroup, ledgerEntries);
+            var matches = FindMatches(unmatchedEntryGroup.ToList(), ledgerEntries);
+            foreach (var match in matches)
+                yield return match;
+
+            var multiMatches = FindMultiMatches(unmatchedEntryGroup.ToList(), ledgerEntries);
+            foreach (var match in multiMatches)
+                yield return match;
         }
-
-        return Task.CompletedTask;
     }
 
-    private static void FindMatches(IGrouping<DateTime, EC_BankStatementEntry> unmatchedEntryGroup, IEnumerable<EC_GeneralLedger> ledgerEntries)
+    private static IEnumerable<MatchResult> FindMatches(List<EC_BankStatementEntry> bankStatementEntries, List<EC_GeneralLedger> ledgerEntries)
     {
-        foreach (var unmatchedEntry in unmatchedEntryGroup.ToList())
+        var matches = FindSingleMatches(bankStatementEntries, ledgerEntries).ToList();
+        foreach (var match in matches)
+            yield return match;
+
+        bankStatementEntries.RemoveAll(x => matches.Select(x => x.BankStatementEntryId).Contains(x.Id));
+        ledgerEntries.RemoveAll(x => matches.Select(x => x.GeneralLedgerId).Contains(x.GeneralLedgerId));
+        var multiMatches = FindMultiMatches(bankStatementEntries, ledgerEntries);
+
+         foreach (var match in multiMatches)
+             yield return match;
+    }
+
+    private static IEnumerable<MatchResult> FindSingleMatches(List<EC_BankStatementEntry> bankStatementEntries, List<EC_GeneralLedger> ledgerEntries)
+    {
+        foreach (var bankStatementEntry in bankStatementEntries)
         {
-            // single match
-            var single = ledgerEntries.SingleOrDefault(x =>
-                x.AmountLocalCurrency.EqualsApproximately(unmatchedEntry.Amount));
-            if (single != null)
-            {
-                //return
-            }
-            else
-            {
-                // find sum
-            }
+            var ledgerMatch = ledgerEntries.SingleOrDefault(x => x.AmountLocalCurrency.EqualsApproximately(bankStatementEntry.Amount));
+            if (ledgerMatch != null)
+                yield return new MatchResult(bankStatementEntry.Id, ledgerMatch.GeneralLedgerId);
         }
     }
+
+    private static IEnumerable<MatchResult> FindMultiMatches(List<EC_BankStatementEntry> bankStatementEntries, List<EC_GeneralLedger> ledgerEntries)
+    {
+        var result = new List<MatchResult>();
+        ledgerEntries = ledgerEntries.Where(x => x.AmountLocalCurrency.HasValue).ToList();
+        
+        foreach (var bankStatementEntry in bankStatementEntries)
+        {
+            var match = FindSums(bankStatementEntry.Amount, ledgerEntries.Select(x => (x.GeneralLedgerId, x.AmountLocalCurrency!.Value)).ToList());
+            result.AddRange(match.Select(x => new MatchResult(bankStatementEntry.BankStatementId, x)));
+        }
+
+        bankStatementEntries.RemoveAll(x => result.Select(x => x.BankStatementEntryId).Contains(x.Id));
+        ledgerEntries.RemoveAll(x => result.Select(x => x.GeneralLedgerId).Contains(x.GeneralLedgerId));
+        
+        foreach (var ledgerEntry in ledgerEntries)
+        {
+            var match = FindSums(ledgerEntry.AmountLocalCurrency!.Value, bankStatementEntries.Select(x => (x.Id, x.Amount)).ToList());
+            result.AddRange(match.Select(x => new MatchResult(x, ledgerEntry.GeneralLedgerId)));
+        }
+
+        return result;
+    }
+
+    private static int[] FindSums(decimal targetSum, List<(int Id, decimal AmountLocalCurrency)> idsWithAmounts)
+    {
+        var maxNumberOfVariations = (int)Math.Round(Math.Pow(2, idsWithAmounts.Count()) - 1);
+        for (var i = 0; i < maxNumberOfVariations; i++)
+        {
+            var filteredList = idsWithAmounts.Filter(i);
+            if (filteredList.Sum(x => x.AmountLocalCurrency).EqualsApproximately(targetSum))
+                return filteredList.Select(x => x.Id).ToArray();
+        }
+
+        return Array.Empty<int>();
+    }
+}
+
+public class MatchResult
+{
+    public MatchResult(int bankStatementEntryId, int generalLedgerId)
+    {
+        BankStatementEntryId = bankStatementEntryId;
+        GeneralLedgerId = generalLedgerId;
+    }
+    
+    public int BankStatementEntryId { get; set; }
+    public int GeneralLedgerId { get; set; }
 }
