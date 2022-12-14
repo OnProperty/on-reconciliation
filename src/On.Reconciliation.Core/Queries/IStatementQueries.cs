@@ -8,6 +8,7 @@ public interface IStatementQueries
 {
     public IEnumerable<EC_BankStatementEntry> GetAllUnmatchedEntries(string bankAccount);
     IEnumerable<EC_BankStatementEntry> GetEntriesForDate(string bankAccount, DateOnly date);
+    public IEnumerable<string> GetAllBankAccounts();
 }
 
 public class StatementQueries : IStatementQueries
@@ -19,7 +20,6 @@ public class StatementQueries : IStatementQueries
         _connection = connection;
     }
     
-    //TODO: set up db schema versioning for reconciliation tables
     public IEnumerable<EC_BankStatementEntry> GetAllUnmatchedEntries(string bankAccount)
     {
         var query = @"SELECT bse.*  FROM EC_BankStatementEntry bse
@@ -48,5 +48,11 @@ public class StatementQueries : IStatementQueries
             });
 
         return result;
+    }
+
+    public IEnumerable<string> GetAllBankAccounts()
+    {
+        var query = "SELECT DISTINCT BankAccount FROM EC_BankStatement";
+        return _connection.Query<string>(query);
     }
 }
