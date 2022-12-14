@@ -1,0 +1,82 @@
+﻿using System.Diagnostics;
+
+namespace On.Reconciliation.Models.Database;
+
+public class EC_AccountCurrentBook
+{
+    public int CurrentBookid { get; set; }
+    public int VoucherNumber { get; set; }
+    public int CustomerSupplierId { get; set; }
+    public int? AccountingPeriod { get; set; }
+    public DateTime? VoucherDate { get; set; }
+    public byte? CurrentBookType { get; set; }
+    public string? Notes { get; set; }
+    public decimal? CurrencyAmount { get; set; }
+    public int? DimensionDepartment { get; set; }
+    public byte? PostingRule { get; set; }
+    public string? InvoiceNumber { get; set; }
+    public DateTime? DueDate { get; set; }
+    public int JournalId { get; set; }
+    public double? AmountLocalCurrency { get; set; }
+    public int? DimensionProject { get; set; }
+    public int AccountingYear { get; set; }
+    public int AccountingClientId { get; set; }
+    public string? PostingDescription { get; set; }
+    public string? CID { get; set; }
+    public int? DimensionRealEstate { get; set; }
+    public int? DimensionObject { get; set; }
+    public int? DimensionProduct { get; set; }
+    public int? DimensionAssignment { get; set; }
+    public int? DimensionEmployee { get; set; }
+    public int? DimensionFree01 { get; set; }
+    public int? DimensionFree02 { get; set; }
+    public int? DimensionFree03 { get; set; }
+    public int? DimensionFree04 { get; set; }
+    public int? AgentClientID { get; set; }
+    public byte? OverdueNoticeRule { get; set; }
+    public byte? CanSentToTheCollectorOfDebts { get; set; }
+    public byte? InterestRule { get; set; }
+    public decimal Balance { get; set; }
+    public int? LastUpdateUserId { get; set; }
+    public DateTime? LastChanged { get; set; }
+    public int? ReversedJournalId { get; set; }
+    public int? ContractId { get; set; }
+    public int? TaskId { get; set; }
+    public int? LoanId { get; set; }
+    public int? BankAccountId { get; set; }
+    public int? GroupAccountId { get; set; }
+    public int? VoucherId { get; set; }
+    public string? docid { get; set; }
+    public byte? RecoveryRuleId { get; set; }
+    public int? AccountingPeriodValue { get; set; }
+    public byte? RecoveryStatusId { get; set; }
+    public int? DebtAccountId { get; set; }
+    public byte? PaymentMethodId { get; set; }
+    public byte? PaymentAlertTypeId { get; set; }
+    public int? RemRuleId { get; set; }
+    public byte? BBSTypeId { get; set; }
+    public int? OverridedBankAccountId { get; set; }
+    public DateTime? RecoveryDueDate { get; set; }
+    public bool? ExcludeFromInterestInvoicing { get; set; }
+    public int? DimensionCommercial { get; set; }
+    public int? DimensionCommercialType { get; set; }
+    public int? VoucherDocumentGroupId { get; set; }
+    public int? WaitingState { get; set; }
+    public string? BankFileMessage { get; set; }
+    public Guid? VoucherIdentifier { get; set; }
+    public int? Color { get; set; }
+    public string? ExternalRecoverySystemReferenceNumber { get; set; }
+    public int? ExternalInvoiceRecoverySystemStatus { get; set; }
+    public int? InternalInvoiceAccountingClientId { get; set; }
+    public int? InternalInvoiceNumber { get; set; }
+    public byte? PaidToExternalInvoiceRecoverySystem { get; set; }
+    public int? CurrentBookActionDetailStatus { get; set; }
+    public string? DebitAccount { get; set; }
+    public int? SplitFromCurrentBookId { get; set; }
+    public string? BankTransactionStatusCode { get; set; }
+    public string? BankTransactionStatusErrorCode { get; set; }
+    public bool? Factoring { get; set; }
+    public int? FactoringStatus { get; set; }
+    public bool? FactoringTransferredToCollection { get; set; }
+    public string? BankTransactionStatusErrorCodeDescription { get; set; }
+}

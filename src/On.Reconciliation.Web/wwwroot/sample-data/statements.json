@@ -1,0 +1,26 @@
+﻿[
+  {
+    "date": "2022-11-19",
+    "description": "tøfler",
+    "amount": 799,
+    "status": "Unmatched"
+  },
+  {
+    "date": "2022-11-20",
+    "description": "lunsj",
+    "amount": 123.4,
+    "status": "IsInBook"
+  },
+  {
+    "date": "2022-11-21",
+    "description": "Bluetooth-adapter",
+    "amount": 499,
+    "status": "BookedByRule"
+  },
+  {
+    "date": "2022-11-21",
+    "description": "Bluetooth-adapter",
+    "amount": 499,
+    "status": "IsInBook"
+  }
+]

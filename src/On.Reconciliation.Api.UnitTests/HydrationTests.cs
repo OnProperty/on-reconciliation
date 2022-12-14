@@ -18,9 +18,16 @@ public class HydrationTests
     }
     
     [Theory]
-    [InlineData(typeof(EC_AccountingClient), "EC_AccountingClient")]
-    public void Get_Model_From_Database_via_Dapper<T>(Type type, string table) where T : new()
+    [InlineData(typeof(EC_AccountingClient))]
+    [InlineData(typeof(EC_BankStatement))]
+    [InlineData(typeof(EC_BankStatementEntry))]
+    [InlineData(typeof(EC_AccountCurrentBook))]
+    [InlineData(typeof(EC_GeneralLedger))]
+    [InlineData(typeof(EC_ReconciliationRules))]
+    public void Get_Model_From_Database_via_Dapper(Type type, string? table = null)
     {
+        table ??= type.Name;
+        
         var reader = _conn.ExecuteReader($"SELECT TOP 1 * FROM {table}");
 
         var modelMemberList = new List<string>();

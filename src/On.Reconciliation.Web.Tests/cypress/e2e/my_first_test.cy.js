@@ -4,11 +4,10 @@ describe("Foo", () => {
         // login logic here, after auth is implemented
     });
 
-    it("successfully opens a page", () => {
-        cy.visit("http://localhost:21080");
-        cy.getByDataCy("list-element-2"); //ok
-        cy.get(".container-one").getByDataCy("list-element-2"); //ok
-        //cy.get(".container-two").getByDataCy("list-element-2"); // fails
+    it("can click on buttons", () => {
+        cy.visit(`${Cypress.env("baseUrl")}/counter`);
+        cy.getByDataCy("incrementer").should('be.visible').click();
+        cy.wait(1000);
+        cy.getByDataCy("counter").should('have.text', "1")
     });
-
 });

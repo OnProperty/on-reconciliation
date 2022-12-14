@@ -1,0 +1,66 @@
+﻿@using On.Reconciliation.Models.ViewModels
+@using System.Globalization
+@code {
+    [Parameter]
+    public Models.ViewModels.StatementViewModel? Data { get; set; }
+    private CultureInfo norwegian = CultureInfo.CreateSpecificCulture("nb-NO");
+
+    protected override Task OnInitializedAsync()
+    {
+        norwegian.NumberFormat.CurrencyDecimalSeparator = ",";
+        norwegian.NumberFormat.CurrencyGroupSeparator = " ";
+        norwegian.NumberFormat.CurrencySymbol = "kr ";
+        return Task.CompletedTask;
+    }
+
+}
+
+<div class="statement-container @Data.Status.ToString()">
+    @if (Data.Status == ReconciliationStatus.Unmatched)
+    {
+        <span class="right">⚠️</span>
+    }
+    <div>@Data.Date?.ToString("dd. MMM yyyy")</div>
+    <div>@Data.Amount?.ToString("C2", norwegian)</div>
+    <div class="statement-description">@Data.Description</div>
+</div>
+
+<style>
+    .statement-container {
+        border-top-right-radius: 1em;
+        border-bottom-left-radius: 1em;
+        background-color: lightgray;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5em;
+        padding: 0.2em 1em;
+        height: 75px;
+    }
+    
+    .statement-container > div {
+        display: inline-block;
+        width: 20%;
+    }
+    
+    .right {
+        float:  right;
+    }
+    
+    .Unknown {
+        #background-color: lightgray;
+    }
+    
+    .Unmatched {
+        #background-color: #f33;
+        border: 2px solid #f33;
+    }
+    
+    .IsInBook {
+        border: 2px solid forestgreen;
+    }
+    
+    .BookedByRule {
+        border: 2px solid slateblue;
+    }
+</style>

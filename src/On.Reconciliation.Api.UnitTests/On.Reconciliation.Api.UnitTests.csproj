@@ -30,7 +30,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\On.Reconciliation.Core\On.Reconciliation.Core.csproj" />
       <ProjectReference Include="..\On.Reconciliation.Models\On.Reconciliation.Models.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
