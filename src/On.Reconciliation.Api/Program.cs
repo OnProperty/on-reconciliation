@@ -1,5 +1,8 @@
 using System.Data;
 using System.Data.SqlClient;
+using On.Reconciliation.Core.Commands;
+using On.Reconciliation.Core.Queries;
+using On.Reconciliation.Core.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +18,21 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IDbConnection>(db => new SqlConnection(builder.Configuration.GetConnectionString("Default")));
+
+// queries
+builder.Services.AddTransient<IRuleQueries, RuleQueries>();
+builder.Services.AddTransient<IStatementQueries, StatementQueries>();
+builder.Services.AddTransient<IAccountingClientQueries, AccountingClientQueries>();
+builder.Services.AddTransient<IGeneralLedgerQueries, GeneralLedgerQueries>();
+
+// commands
+builder.Services.AddTransient<IBookingCommands, BookingCommands>();
+builder.Services.AddTransient<IReconciliationCommands, ReconciliationCommands>();
+
+// services
+builder.Services.AddTransient<IMatchingService, MatchingService>();
+builder.Services.AddTransient<IRuleService, RuleService>();
+
 
 var app = builder.Build();
 

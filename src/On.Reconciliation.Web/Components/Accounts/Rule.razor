@@ -1,0 +1,21 @@
+﻿@code {
+    [Parameter]
+    public Models.ViewModels.RuleViewModel Data { get; set; }
+}
+
+<div class="rule-container">
+    <h2>@Data.Name</h2>
+    <div><span class="quote">@Data.ContainsDescription</span></div>
+    <div>
+        @if(Data.AccountingClientId.HasValue) { <span>@Data.AccountingClientId</span>}
+        else{<span>Global regel</span>}
+    </div>
+</div>
+
+<style>
+    .quote {
+        outline: 1px solid grey;
+        background-color: lightyellow;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+</style>
