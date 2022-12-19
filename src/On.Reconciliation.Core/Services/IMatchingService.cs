@@ -8,7 +8,8 @@ namespace On.Reconciliation.Core.Services;
 
 public interface IMatchingService
 {
-    IEnumerable<MatchResult> AutomatchForBankAccount(string bankAccount);
+    IEnumerable<MatchResult> FindAllMatches();
+    IEnumerable<MatchResult> FindMatchesForBankAccount(string bankAccount);
 }
 
 public class MatchingService : IMatchingService
@@ -22,7 +23,20 @@ public class MatchingService : IMatchingService
         _statementQueries = statementQueries;
     }
     
-    public IEnumerable<MatchResult> AutomatchForBankAccount(string bankAccount)
+    public IEnumerable<MatchResult> FindAllMatches()
+    {
+        var result = new List<MatchResult>();
+        
+        var bankAccounts =  _statementQueries.GetAllBankAccounts();
+        foreach (var bankAccount in bankAccounts)
+        {
+            result.AddRange(FindMatchesForBankAccount(bankAccount));
+        }
+
+        return result;
+    }
+
+    public IEnumerable<MatchResult> FindMatchesForBankAccount(string bankAccount)
     {
         var unmatchedEntries = _statementQueries.GetAllUnmatchedEntries(bankAccount);
         var unmatchedEntryGroups = unmatchedEntries

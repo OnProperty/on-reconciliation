@@ -4,6 +4,8 @@ using On.Reconciliation.Core.Commands;
 using On.Reconciliation.Core.Queries;
 using On.Reconciliation.Core.Services;
 using Serilog;
+using Thon.Hotels.FishBus;
+using Thon.Hotels.FishBus.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,8 @@ builder.Services.AddTransient<IReconciliationCommands, ReconciliationCommands>()
 builder.Services.AddTransient<IMatchingService, MatchingService>();
 builder.Services.AddTransient<IRuleService, RuleService>();
 
+builder.Services.ConfigureMessaging()
+    .Configure<MessageSources>(builder.Configuration.GetSection("MessageSources"));
 
 var app = builder.Build();
 

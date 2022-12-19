@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Microsoft.Extensions.Configuration;
 using On.Reconciliation.Models.Database;
 
 namespace On.Reconciliation.Core.Commands;
@@ -11,10 +12,12 @@ public interface IBookingCommands
 public class BookingCommands : IBookingCommands
 {
     private readonly IDbConnection _connection;
+    private readonly string _serviceBusConnectionString;
 
-    public BookingCommands(IDbConnection connection)
+    public BookingCommands(IDbConnection connection, IConfiguration configuration)
     {
         _connection = connection;
+        _serviceBusConnectionString = configuration.GetConnectionString("ReconciliationCommandServiceBus");
     }
 
     public void BookStatementByRule(EC_BankStatementEntry bankStatementEntry, EC_ReconciliationRules ecReconciliationRules)
