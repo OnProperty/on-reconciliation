@@ -20,7 +20,7 @@ public class RuleTests
     [InlineData("Det er noe her og litt mer", 3)]
     [InlineData("Det er noe annet her og litt mer", 4)]
     [InlineData("Denne skal ikke matche", null)]
-    public void Correectly_matches_with_contains(string additionalInfo, int? expectedRuleId)
+    public void Correctly_matches_with_contains(string additionalInfo, int? expectedRuleId)
     {
         var entry = new EC_BankStatementEntry()
         {
@@ -37,7 +37,7 @@ public class RuleTests
             success.Should().BeFalse();
         }
     }
-
+    
     [Theory]
     [InlineData("Det er noe her og litt mer", 3)]
     public void Prioritises_local_rules_before_global(string additionalInfo, int? expectedRuleId)
