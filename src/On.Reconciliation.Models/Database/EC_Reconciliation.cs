@@ -2,8 +2,9 @@
 
 public class EC_Reconciliation
 {
-    public EC_BankStatement? BankStatement { get; set; }
     public int Id { get; set; }
-    public int BankStatementId { get; set; }
-    public int BookId { get; set; }
+    public int GeneralLedgerId { get; set; }
+    public int BankStatementEntryId { get; set; }
+    public DateTime LastChanged { get; set; }
+    public int? RuleId { get; set; }
 }
