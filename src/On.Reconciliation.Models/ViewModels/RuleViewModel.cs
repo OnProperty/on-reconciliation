@@ -19,7 +19,7 @@ public static class RuleExtensions
         return new RuleViewModel()
         {
             Name = rule.RuleName,
-            AccountId = rule.AccountId,
+            AccountId = rule.AccountNumber,
             AccountingClientId = rule.AccountingClientId,
             ContainsDescription = rule.ContainsDescription,
             CreatedBy = rule.CreatedBy,
