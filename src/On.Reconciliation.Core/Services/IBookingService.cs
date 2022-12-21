@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using On.Reconciliation.Models.Options;
 using OnProperty.Messaging.Internal.Reconciliation.Commands;
 using Thon.Hotels.FishBus;
@@ -12,16 +13,16 @@ public interface IBookingService
 
 public class BookingService : IBookingService
 {
-    private readonly BookingServiceBusSettings _settings;
+    private readonly string _serviceBusConnectionString;
 
-    public BookingService(IOptions<BookingServiceBusSettings> options)
+    public BookingService(IConfiguration configuration)
     {
-        _settings = options.Value;
+        _serviceBusConnectionString = configuration.GetConnectionString("BookingServiceBus");
     }
     
     public async Task BookReconciliation(BookReconciliationCommand command)
     {
-        var publisher = new MessagePublisher(_settings.ConnectionString);
+        var publisher = new MessagePublisher(_serviceBusConnectionString);
         await publisher.SendAsync(command);
     }
 }
