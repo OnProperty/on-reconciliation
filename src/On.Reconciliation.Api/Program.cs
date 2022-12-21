@@ -28,10 +28,10 @@ builder.Services.AddTransient<IAccountingClientQueries, AccountingClientQueries>
 builder.Services.AddTransient<IGeneralLedgerQueries, GeneralLedgerQueries>();
 
 // commands
-builder.Services.AddTransient<IBookingCommands, BookingCommands>();
 builder.Services.AddTransient<IReconciliationCommands, ReconciliationCommands>();
 
 // services
+builder.Services.AddTransient<IBookingService, BookingService>();
 builder.Services.AddTransient<IMatchingService, MatchingService>();
 builder.Services.AddTransient<IRuleService, RuleService>();
 

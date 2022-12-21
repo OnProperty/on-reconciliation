@@ -7,6 +7,7 @@ namespace On.Reconciliation.Core.Queries;
 public interface IRuleQueries
 {
     List<EC_ReconciliationRules> GetAllRulesForBankAccount(string bankAccount, int? accountingClientId = null);
+    EC_ReconciliationRuleBookings GetRuleBooking(Guid voucherIdentifier);
 }
 
 public class RuleQueries : IRuleQueries
@@ -30,5 +31,12 @@ public class RuleQueries : IRuleQueries
         var result = _connection.Query<EC_ReconciliationRules>(query, new {bankAccount, accountingClientId});
 
         return result.ToList();
+    }
+
+    public EC_ReconciliationRuleBookings GetRuleBooking(Guid voucherIdentifier)
+    {
+        var query = "SELECT * FROM EC_ReconciliationRuleBookings WHERE VoucherIdentifier = @voucherIdentifier";
+        var result = _connection.QuerySingle(query, new {voucherIdentifier});
+        return result;
     }
 }

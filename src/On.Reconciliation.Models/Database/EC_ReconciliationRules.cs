@@ -9,7 +9,7 @@ public class EC_ReconciliationRules
     public int CreatedBy { get; set; }
     public DateTime LastChanged { get; set; }
     public string? PostingDescription { get; set; }
-    public int AccountNumber { get; set; }
+    public ushort AccountNumber { get; set; }
     public int? DimensionDepartmentId { get; set; }
     public int? DimensionProjectId { get; set; }
     public int? VatCodeId { get; set; }

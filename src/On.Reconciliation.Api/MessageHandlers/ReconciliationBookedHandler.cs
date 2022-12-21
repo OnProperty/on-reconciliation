@@ -8,14 +8,18 @@ namespace On.Reconciliation.Api.MessageHandlers;
 
 public class ReconciliationBookedHandler: IHandleMessage<ReconciliationBooked>
 {
-    private readonly IMatchingService _matchingService;
+    private readonly IRuleQueries _ruleQueries;
     private readonly IReconciliationCommands _reconciliationCommands;
+    private readonly IRuleCommands _ruleCommands;
+    private readonly IGeneralLedgerQueries _generalLedgerQueries;
     private readonly ILogger<ReconciliationBookedHandler> _logger;
 
-    public ReconciliationBookedHandler(IMatchingService matchingService, IReconciliationCommands reconciliationCommands, ILogger<ReconciliationBookedHandler> logger)
+    public ReconciliationBookedHandler(IRuleQueries ruleQueries, IReconciliationCommands reconciliationCommands, IRuleCommands ruleCommands, IGeneralLedgerQueries generalLedgerQueries, ILogger<ReconciliationBookedHandler> logger)
     {
-        _matchingService = matchingService;
+        _ruleQueries = ruleQueries;
         _reconciliationCommands = reconciliationCommands;
+        _ruleCommands = ruleCommands;
+        _generalLedgerQueries = generalLedgerQueries;
         _logger = logger;
     }
     
@@ -25,8 +29,15 @@ public class ReconciliationBookedHandler: IHandleMessage<ReconciliationBooked>
         // entire matching run for all currently unmatched entries
         try
         {
-            var matches = _matchingService.FindAllMatches().ToList();
+            var ruleBooking = _ruleQueries.GetRuleBooking(message.VoucherIdentifier);
+            var matches = _generalLedgerQueries
+                .GetByVoucherIdentifier(message.VoucherIdentifier)
+                .Select(x => new MatchResult(ruleBooking.BankStatementEntryId, x.GeneralLedgerId, ruleBooking.RuleId))
+                .ToList();
+            if (!matches.Any())
+                throw new Exception($"Failed handling reconciliation booked: could not find general ledger entries for voucher identifier {message.VoucherIdentifier}");
             _reconciliationCommands.InsertMatches(matches);
+            _ruleCommands.RemoveTemporaryRuleBookingDetails(message.VoucherIdentifier);
         }
         catch (Exception ex)
         {

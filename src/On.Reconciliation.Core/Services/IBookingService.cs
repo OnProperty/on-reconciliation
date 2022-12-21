@@ -7,7 +7,7 @@ namespace On.Reconciliation.Core.Services;
 
 public interface IBookingService
 {
-    public Task BookReconciliationStatement(BookReconciliationCommand command);
+    public Task BookReconciliation(BookReconciliationCommand command);
 }
 
 public class BookingService : IBookingService
@@ -19,7 +19,7 @@ public class BookingService : IBookingService
         _settings = options.Value;
     }
     
-    public async Task BookReconciliationStatement(BookReconciliationCommand command)
+    public async Task BookReconciliation(BookReconciliationCommand command)
     {
         var publisher = new MessagePublisher(_settings.ConnectionString);
         await publisher.SendAsync(command);
