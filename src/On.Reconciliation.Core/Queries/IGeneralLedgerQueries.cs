@@ -8,6 +8,7 @@ public interface IGeneralLedgerQueries
 {
     IEnumerable<EC_GeneralLedger> GetBookEntriesForSingleDay(DateOnly date, string bankAccount);
     IEnumerable<EC_GeneralLedger> GetBookEntriesForSingleDay(DateTime date, string bankAccount);
+    IEnumerable<EC_GeneralLedger> GetByVoucherIdentifier(Guid voucherIdentifier);
 }
 
 public class GeneralLedgerQueries : IGeneralLedgerQueries
@@ -40,5 +41,11 @@ public class GeneralLedgerQueries : IGeneralLedgerQueries
             dateEnd = date.ToDateTime(TimeOnly.MaxValue),
             bankAccount 
         });
+    }
+
+    public IEnumerable<EC_GeneralLedger> GetByVoucherIdentifier(Guid voucherIdentifier)
+    {
+        var query = @"SELECT * FROM EC_GeneralLedger WHERE VoucherIdentifier = @voucherIdentifier";
+        return _connection.Query<EC_GeneralLedger>(query, new {voucherIdentifier});
     }
 }

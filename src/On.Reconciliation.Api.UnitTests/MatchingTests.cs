@@ -30,7 +30,7 @@ public class MatchingTests
     [Fact]
     public void FindsSingleMatch()
     {
-        var results = _matchingService.AutomatchForBankAccount(BankAccount);
+        var results = _matchingService.FindMatchesForBankAccount(BankAccount);
         var oneToOne = results.Where(x => x.BankStatementEntryId == 34).ToList();
         oneToOne.Count().Should().Be(1);
         oneToOne.Single().GeneralLedgerId.Should().Be(83763);
@@ -39,7 +39,7 @@ public class MatchingTests
     [Fact]
     public void FindsMultiMatch()
     {
-        var results = _matchingService.AutomatchForBankAccount(BankAccount);
+        var results = _matchingService.FindMatchesForBankAccount(BankAccount);
         var manyToOne = results.Where(x => x.GeneralLedgerId == 83767).OrderBy(x => x.BankStatementEntryId).ToList();
         manyToOne.Count.Should().Be(3);
         manyToOne[0].BankStatementEntryId.Should().Be(31);
@@ -50,7 +50,7 @@ public class MatchingTests
     [Fact]
     public void Foo()
     {
-        var matches = _matchingService.AutomatchForBankAccount(BankAccount).ToList();
+        var matches = _matchingService.FindMatchesForBankAccount(BankAccount).ToList();
         _reconciliationCommands.InsertMatches(matches);
     }
 }

@@ -1,0 +1,36 @@
+﻿@using On.Reconciliation.Models.ViewModels
+@inject HttpClient Http
+
+<h2>Kontoer</h2>
+
+@{
+    if (rules == null)
+    {
+        <p><em>Laster...</em></p>
+    }
+    else
+    {
+        foreach (var rule in rules)
+        {
+            <Rule Data=@rule />
+        }
+    }
+}
+
+@code {
+    private RuleViewModel[]? rules;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+        rules = (await Http.GetFromJsonAsync<RuleViewModel[]>("sample-data/accounts.json"))?
+            .ToArray();
+    }
+}
+
+
+<style>
+    h2 {
+        color:  white;
+    }
+</style>

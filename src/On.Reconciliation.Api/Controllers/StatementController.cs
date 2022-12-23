@@ -4,7 +4,8 @@ using On.Reconciliation.Models.ViewModels;
 
 namespace On.Reconciliation.Api.Controllers;
 
-public class StatementController
+[Route("[controller]")]
+public class StatementController: ControllerBase
 {
     private readonly IStatementQueries _statementQueries;
     private readonly IAccountingClientQueries _accountingClientQueries;
