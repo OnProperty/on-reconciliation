@@ -1,0 +1,27 @@
+version: '3.2'
+
+# run Cypress tests and exit with command
+#   docker-compose up --exit-code-from cypress
+services:
+  # this is the web application we are going to test
+  reconciliationweb:
+    build: 
+      context: ../
+      dockerfile: On.Reconciliation.Web.dockerfile
+    ports:
+      - 80:80
+  # Cypress container
+  cypress:
+    # the Docker image to use from https://github.com/cypress-io/cypress-docker-images
+    image: "cypress/included:4.0.2"
+    depends_on:
+      - reconciliationweb
+    environment:
+      # pass base url to test pointing at the web application
+      - CYPRESS_baseUrl=http://reconciliationweb
+    # share the current folder as volume to avoid copying
+    working_dir: /On.Reconciliation.Web.Tests
+    volumes:
+      - ./:/On.Reconciliation.Web.Tests
+    links:
+      - "reconciliationweb"
