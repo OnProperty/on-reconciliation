@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace On.Reconciliation.Models.Database;
+﻿namespace On.Reconciliation.Models.Database.Pure;
 
 public class EC_BankStatement
 {

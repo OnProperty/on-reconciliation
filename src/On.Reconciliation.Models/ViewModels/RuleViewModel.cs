@@ -1,4 +1,5 @@
 ﻿using On.Reconciliation.Models.Database;
+using On.Reconciliation.Models.Database.Pure;
 
 namespace On.Reconciliation.Models.ViewModels;
 

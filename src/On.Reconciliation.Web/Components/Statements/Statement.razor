@@ -15,8 +15,8 @@
 
 }
 
-<div class="statement-container @Data.Status.ToString()">
-    @if (Data.Status == ReconciliationStatus.Unmatched)
+<div class="statement-container">
+    @if (Data.GeneralLedgerId == null)
     {
         <span class="right">⚠️</span>
     }

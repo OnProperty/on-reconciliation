@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using On.Reconciliation.Core.Extensions;
 using On.Reconciliation.Core.Queries;
 using On.Reconciliation.Models.Database;
+using On.Reconciliation.Models.Database.Pure;
 
 namespace On.Reconciliation.Core.Services;
 

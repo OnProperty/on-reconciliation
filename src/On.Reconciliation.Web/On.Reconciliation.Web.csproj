@@ -20,6 +20,15 @@
     <_ContentIncludedByDefault Remove="Pages\AccountList\Account.razor" />
     <_ContentIncludedByDefault Remove="Pages\AccountList\AccountList.razor" />
     <_ContentIncludedByDefault Remove="Shared\StatementList\Statement.razor" />
+    <_ContentIncludedByDefault Remove="publish\web.config" />
+    <_ContentIncludedByDefault Remove="publish\publish\wwwroot\sample-data\accounts.json" />
+    <_ContentIncludedByDefault Remove="publish\publish\wwwroot\sample-data\statements.json" />
+    <_ContentIncludedByDefault Remove="publish\publish\wwwroot\sample-data\weather.json" />
+    <_ContentIncludedByDefault Remove="publish\publish\wwwroot\_framework\blazor.boot.json" />
+    <_ContentIncludedByDefault Remove="publish\wwwroot\sample-data\accounts.json" />
+    <_ContentIncludedByDefault Remove="publish\wwwroot\sample-data\statements.json" />
+    <_ContentIncludedByDefault Remove="publish\wwwroot\sample-data\weather.json" />
+    <_ContentIncludedByDefault Remove="publish\wwwroot\_framework\blazor.boot.json" />
   </ItemGroup>
 
   <ItemGroup>

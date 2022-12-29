@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace On.Reconciliation.Models.Database;
+namespace On.Reconciliation.Models.Database.Pure;
 
 public sealed record class EC_AccountingClient
 {

@@ -21,7 +21,7 @@ public class AccountingClientQueries : IAccountingClientQueries
     
     public int[] GetAccountingClientsForUser(string userId)
     {
-        throw new NotImplementedException();
+        return new[] {1, 3}; //TODO: actual query
     }
 
     public string[] GetBankAccounts(int accountingClientId)

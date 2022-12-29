@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using On.Reconciliation.Core.Commands;
 using On.Reconciliation.Core.Queries;
 using On.Reconciliation.Models.ViewModels;
 
@@ -19,7 +20,7 @@ public class StatementController: ControllerBase
     //TODO: auth 
     //TODO: verify access to client
     [HttpGet]
-    public IEnumerable<StatementViewModel> GetByBankAccount([FromQuery]string bankAccount)
+    public IEnumerable<StatementViewModel> GetUnmatchedEntries([FromQuery]string bankAccount)
     {
         var statements = _statementQueries.GetAllUnmatchedEntries(bankAccount);
         return statements.Select(x => x.ToViewModel());

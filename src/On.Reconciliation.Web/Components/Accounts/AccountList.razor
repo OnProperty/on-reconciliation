@@ -12,18 +12,20 @@
     {
         foreach (var account in accounts)
         {
-            <Account Data=@account />
+            <div class="overview-container">
+                <em>@account.BankAccount</em>
+                @account.Entries.Count (<span class="by-rule">@account.Entries.Count(x => x.RuleId != null)</span> <span class="missing">@account.Entries.Count(x => x.GeneralLedgerId == null)</span>)
+            </div>
         }
     }
 }
 
 @code {
-    private AccountViewModel[]? accounts;
+    private AccountOverviewViewModel[]? accounts;
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(500);
-        accounts = (await Http.GetFromJsonAsync<AccountViewModel[]>("sample-data/accounts.json"))?
+        accounts = (await Http.GetFromJsonAsync<AccountOverviewViewModel[]>("http://"))?
             .ToArray();
     }
 }
@@ -33,4 +35,23 @@
     h2 {
         color:  white;
     }
+    
+    .overview-container {
+        border: 1px solid grey;
+        border-radius: 0.5em;
+    }
+    
+    .overview-container:hover {
+        background-color: lightblue;
+        border-color: purple;
+    }
+    
+    .by-rule {
+        color: darkgreen;
+    }
+    
+    .missing {
+        color: red;
+        font-weight: bold;
+    }    
 </style>

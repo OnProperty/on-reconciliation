@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Dapper;
 using On.Reconciliation.Models.Database;
+using On.Reconciliation.Models.Database.Pure;
 
 namespace On.Reconciliation.Core.Commands;
 

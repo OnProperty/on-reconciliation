@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using On.Reconciliation.Models.Database;
+using On.Reconciliation.Models.Database.Pure;
 
 namespace On.Reconciliation.Models.ViewModels;
 
@@ -9,7 +10,7 @@ public class StatementViewModel
     public string? Description { get; set; }
     public decimal? Amount { get; set; }
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public ReconciliationStatus Status { get; set; }
+    public int? GeneralLedgerId { get; set; }
 }
 
 public static class StatementViewModelExtensions
@@ -23,13 +24,4 @@ public static class StatementViewModelExtensions
             Description = statementEntry.AdditionalInfo
         };
     }
-}
-
-[JsonConverter(typeof(JsonStringEnumConverter))]
-public enum ReconciliationStatus
-{
-    Unknown,
-    Unmatched,
-    IsInBook,
-    BookedByRule
 }

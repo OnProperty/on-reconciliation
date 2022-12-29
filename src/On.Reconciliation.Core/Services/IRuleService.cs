@@ -2,6 +2,7 @@
 using On.Reconciliation.Core.Extensions;
 using On.Reconciliation.Core.Queries;
 using On.Reconciliation.Models.Database;
+using On.Reconciliation.Models.Database.Pure;
 using OnProperty.Messaging.Internal.Reconciliation.Commands;
 
 namespace On.Reconciliation.Core.Services;
