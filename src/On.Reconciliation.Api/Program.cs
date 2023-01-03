@@ -20,6 +20,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin();
+    });
+});
+
 builder.Services.AddTransient<IDbConnection>(db => new SqlConnection(builder.Configuration.GetConnectionString("Default")));
 
 // queries
@@ -38,7 +46,7 @@ builder.Services.AddTransient<IBookingService, BookingService>();
 builder.Services.AddTransient<IMatchingService, MatchingService>();
 builder.Services.AddTransient<IRuleService, RuleService>();
 
-builder.Services.ConfigureMessaging().Configure<MessageSources>(builder.Configuration.GetSection("MessageSources"));
+//builder.Services.ConfigureMessaging().Configure<MessageSources>(builder.Configuration.GetSection("MessageSources"));
 
 var app = builder.Build();
 
@@ -51,5 +59,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllOrigins");
 
 app.Run();

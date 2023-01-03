@@ -25,8 +25,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        accounts = (await Http.GetFromJsonAsync<AccountOverviewViewModel[]>("http://"))?
-            .ToArray();
+        accounts = (await Http.GetFromJsonAsync<AccountOverviewViewModel[]>("http://localhost:7035/Overview/Summaries"))?.ToArray();
     }
 }
 

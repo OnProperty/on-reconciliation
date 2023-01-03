@@ -4,7 +4,8 @@ using On.Reconciliation.Models.ViewModels;
 
 namespace On.Reconciliation.Api.Controllers;
 
-public class OverviewController : Controller
+[Route("[controller]")]
+public class OverviewController : ControllerBase
 {
     private readonly IAccountingClientQueries _accountingClientQueries;
     private readonly IStatementQueries _statementQueries;
@@ -15,10 +16,11 @@ public class OverviewController : Controller
         _statementQueries = statementQueries;
     }
     
-    [HttpGet]
+    [HttpGet("Summaries")]
     public IEnumerable<AccountOverviewViewModel> GetSummaries()
     {
         var result = new List<AccountOverviewViewModel>();
+        var year = DateTime.Now.Year;
         var month = DateTime.Now.Month;
         var accountingClientWithBankAccounts = _accountingClientQueries
             .GetAccountingClientsForUser("")
@@ -28,7 +30,7 @@ public class OverviewController : Controller
         {
             foreach (var bankAccount in accountingClient.Value)
             {
-                var entries = _statementQueries.GetAllEntriesForMonth(bankAccount, month).ToList();
+                var entries = _statementQueries.GetAllEntriesForMonth(bankAccount, year, month).ToList();
                 result.Add(new AccountOverviewViewModel()
                 {
                     BankAccount = bankAccount,

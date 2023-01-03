@@ -2,7 +2,7 @@
 @using System.Globalization
 @code {
     [Parameter]
-    public Models.ViewModels.StatementViewModel? Data { get; set; }
+    public StatementViewModel? Data { get; set; }
     private CultureInfo norwegian = CultureInfo.CreateSpecificCulture("nb-NO");
 
     protected override Task OnInitializedAsync()
@@ -15,52 +15,23 @@
 
 }
 
-<div class="statement-container">
+<div class="p-4 flex rounded-l">
     @if (Data.GeneralLedgerId == null)
     {
         <span class="right">⚠️</span>
     }
-    <div>@Data.Date?.ToString("dd. MMM yyyy")</div>
-    <div>@Data.Amount?.ToString("C2", norwegian)</div>
-    <div class="statement-description">@Data.Description</div>
+    <div class="flex-none">@Data.Amount?.ToString("C2", norwegian)</div>
+    <div class="grow statement-description">@Data.Description</div>
 </div>
 
 <style>
-    .statement-container {
+    .container {
         border-top-right-radius: 1em;
         border-bottom-left-radius: 1em;
         background-color: lightgray;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5em;
-        padding: 0.2em 1em;
-        height: 75px;
-    }
-    
-    .statement-container > div {
-        display: inline-block;
-        width: 20%;
     }
     
     .right {
         float:  right;
-    }
-    
-    .Unknown {
-        #background-color: lightgray;
-    }
-    
-    .Unmatched {
-        #background-color: #f33;
-        border: 2px solid #f33;
-    }
-    
-    .IsInBook {
-        border: 2px solid forestgreen;
-    }
-    
-    .BookedByRule {
-        border: 2px solid slateblue;
     }
 </style>

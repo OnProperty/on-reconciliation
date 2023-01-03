@@ -1,11 +1,20 @@
-﻿@page "/statements"
+﻿@page "/statements/{bankAccount}/{year:int?}/{month:int?}"
 @using On.Reconciliation.Models.ViewModels
 @using On.Reconciliation.Web.Components.Statements;
+@using On.Reconciliation.Web.Helpers
 @inject HttpClient Http
 
 <PageTitle>Bankavstemming</PageTitle>
 
-<h1>Bank statements for #ACCOUNT#</h1>
+<h1 class="text-center text-2xl">@DottedBankAccount(BankAccount)</h1>
+<div class="flex items-center bg-blue-200 rounded-xl px-10">
+    <a href="@GetPreviousLink()" class="flex-none text-4xl hover:bg-lightblue">⬅ @MonthHelper.FullName(Date.Month - 1)</a>
+    <h1 class="grow text-center text-6xl">@MonthHelper.FullName(Date.Month) @Year</h1>
+    @if (Date.AddMonths(1) < DateTime.Now)
+    {
+        <a href="@GetNextLink()" class="flex-none text-4xl hover:bg-blue">@MonthHelper.FullName(Date.Month + 1) ➡</a>
+    }
+</div>
 
 @if (statements == null)
 {
@@ -13,22 +22,89 @@
 }
 else
 {
-    <div style="max-width:800px">
-    @foreach (var statement in statements)
+    @foreach (var day in statementGroups)
     {
-        <Statement Data=@statement />
+        <div class="bg-grey">
+            <strong>@(day.Key).</strong>
+            @foreach (var statement in day.ToList())
+            {
+                <Statement Data=@statement />
+            }    
+        </div>
+        
     }
-    </div>
 }
 
 @code {
+    private DateTime Date;
+    
+    [Parameter]
+    public string BankAccount { get; set; }
+
+    [Parameter]
+    public int? Year { get; set; }
+
+    [Parameter]
+    public int? Month { get; set; }
+
     private StatementViewModel[]? statements;
+
+    private IEnumerable<IGrouping<int, StatementViewModel>> statementGroups;
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(500);
-        statements = (await Http.GetFromJsonAsync<StatementViewModel[]>("sample-data/statements.json"))?
+        ValidateYearAndMonth();
+
+        Date = new DateTime(Year!.Value, Month!.Value, 1);
+        
+        statements = (await Http.GetFromJsonAsync<StatementViewModel[]>($"https://localhost:7203/Statement/{BankAccount}/{Year}/{Month}"))?
             .OrderByDescending(x => x.Date)
             .ToArray();
+
+        statementGroups = statements.GroupBy(x => x.Date.Value.Day);
+    }
+
+    private void ValidateYearAndMonth()
+    {
+        if (Year == null)
+            throw new ArgumentException("Year must have a value");
+
+        if (Month == null)
+        {
+            throw new ArgumentException("Month must have a value");
+        }
+        
+        if (Month is < 1 or > 12)
+            throw new Exception("Month must be between 1 and 12");
+
+        if (Year > DateTime.Now.Year)
+            throw new Exception("Year can't be in the future");
+
+    }
+
+    private string GetPreviousLink()
+    {
+        return CreateUrl(Date.AddMonths(-1));
+    }
+
+    private string GetNextLink()
+    {
+        return CreateUrl(Date.AddMonths(1));
+    }
+
+    private string CreateUrl(DateTime date)
+    {
+        return $"/statements/{BankAccount}/{date.Year}/{date.Month}";
+    }
+
+    private string DottedBankAccount(string bankAccount)
+    {
+        if (string.IsNullOrEmpty(bankAccount))
+            throw new ArgumentException("bankAccount must have a value");
+
+        if (bankAccount.Length != 11)
+            throw new ArgumentException("bankAccount must have 11 digits");
+        
+        return $"{bankAccount[0..4]}.{bankAccount[5..7]}.{bankAccount[6..]}";
     }
 }

@@ -25,4 +25,11 @@ public class StatementController: ControllerBase
         var statements = _statementQueries.GetAllUnmatchedEntries(bankAccount);
         return statements.Select(x => x.ToViewModel());
     }
+
+    [HttpGet("{bankAccount}/{year}/{month}")]
+    public List<StatementViewModel> Get(string bankAccount, int year, int month)
+    {
+        var statements = _statementQueries.GetAllEntriesForMonth(bankAccount, year, month);
+        return statements.Select(x => x.ToViewModel()).ToList();
+    }
 }

@@ -8,7 +8,7 @@ namespace On.Reconciliation.Core.Queries;
 public interface IStatementQueries
 {
     public IEnumerable<EC_BankStatementEntry> GetAllUnmatchedEntries(string bankAccount);
-    public IEnumerable<EntryWithStatus> GetAllEntriesForMonth(string bankAccount, int month);
+    public IEnumerable<EntryWithStatus> GetAllEntriesForMonth(string bankAccount, int year, int month);
     public IEnumerable<string> GetAllBankAccounts();
 }
 
@@ -36,9 +36,9 @@ public class StatementQueries : IStatementQueries
         return result;
     }
 
-    public IEnumerable<EntryWithStatus> GetAllEntriesForMonth(string bankAccount, int month)
+    public IEnumerable<EntryWithStatus> GetAllEntriesForMonth(string bankAccount, int year, int month)
     {
-        var firstOfMonth = new DateTime(DateTime.Now.Year, month, 1);
+        var firstOfMonth = new DateTime(year, month, 1);
         var firstOfNextMonth = firstOfMonth.AddMonths(1);
         var query = @"SELECT bs.BankAccount, r.GeneralLedgerId, r.RuleId, bse.*
                       FROM EC_BankStatementEntry bse 

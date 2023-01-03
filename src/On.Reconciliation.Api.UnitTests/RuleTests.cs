@@ -2,15 +2,18 @@
 using On.Reconciliation.Core.Extensions;
 using On.Reconciliation.Models.Database;
 using On.Reconciliation.Models.Database.Pure;
+using Xunit.Abstractions;
 
 namespace On.Reconciliation.Api.UnitTests;
 
 public class RuleTests
 {
+    private readonly ITestOutputHelper _testOutputHelper;
     private readonly List<EC_ReconciliationRules> _rules;
 
-    public RuleTests()
+    public RuleTests(ITestOutputHelper testOutputHelper)
     {
+        _testOutputHelper = testOutputHelper;
         _rules = new List<EC_ReconciliationRules>()
         {
             new EC_ReconciliationRules() {}
