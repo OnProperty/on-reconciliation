@@ -7,12 +7,12 @@
 <PageTitle>Bankavstemming</PageTitle>
 
 <h1 class="text-center text-2xl">@DottedBankAccount(BankAccount)</h1>
-<div class="flex items-center bg-blue-200 rounded-xl px-10">
-    <a href="@GetPreviousLink()" class="flex-none text-4xl hover:bg-lightblue">⬅ @MonthHelper.FullName(Date.Month - 1)</a>
+<div class="flex items-center bg-blue-200 rounded-xl px-10 py-3">
+    <a href="@GetPreviousLink()" class="flex-none text-4xl rounded-xl hover:bg-blue-400 focus:outline-2">⬅ @MonthHelper.FullName(Date.Month - 1)</a>
     <h1 class="grow text-center text-6xl">@MonthHelper.FullName(Date.Month) @Year</h1>
     @if (Date.AddMonths(1) < DateTime.Now)
     {
-        <a href="@GetNextLink()" class="flex-none text-4xl hover:bg-blue">@MonthHelper.FullName(Date.Month + 1) ➡</a>
+        <a href="@GetNextLink()" class="flex-none text-4xl hover:bg-red-200">@MonthHelper.FullName(Date.Month + 1) ➡</a>
     }
 </div>
 
@@ -24,8 +24,8 @@ else
 {
     @foreach (var day in statementGroups)
     {
-        <div class="bg-grey">
-            <strong>@(day.Key).</strong>
+        <div class="rounded-3xl @GetBackgroundColor(day) my-1">
+            <span class="text-3xl px-4">@(day.Key).</span>
             @foreach (var statement in day.ToList())
             {
                 <Statement Data=@statement />
@@ -62,6 +62,13 @@ else
             .ToArray();
 
         statementGroups = statements.GroupBy(x => x.Date.Value.Day);
+    }
+
+    private string GetBackgroundColor(IGrouping<int, StatementViewModel> statementViewModels)
+    {
+        if (statementViewModels.Any(x => x.GeneralLedgerId == null))
+            return "bg-red-300";
+        return "bg-slate-200";
     }
 
     private void ValidateYearAndMonth()

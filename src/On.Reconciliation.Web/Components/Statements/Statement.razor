@@ -13,25 +13,27 @@
         return Task.CompletedTask;
     }
 
+    private string GetStatusEmoji()
+    {
+        if (Data.GeneralLedgerId == null)
+            return "⚠️";
+        else
+            return "✔️";
+    }
 }
 
-<div class="p-4 flex rounded-l">
-    @if (Data.GeneralLedgerId == null)
-    {
-        <span class="right">⚠️</span>
-    }
-    <div class="flex-none">@Data.Amount?.ToString("C2", norwegian)</div>
-    <div class="grow statement-description">@Data.Description</div>
+<div class="p-4 rounded-l grid grid-cols-12 gap-2 @(Data.GeneralLedgerId == null ? "bg-red-300" : "even:bg-gray-100")">
+    <div class="basis-1/8 text-right align-middle px-4 py-1 col-span-2">
+        @Data.Amount?.ToString("C2", norwegian)
+        <span class="text-2xl">@GetStatusEmoji()</span>
+    </div>
+    <div class="text-center">
+        @if (Data.GeneralLedgerId == null)
+        {
+            <button class="px-2 text-2xl" alt-text="Bokfør">✍️</button>
+        }
+    </div>
+    <div class="basis-7/8 flex flex-col statement-description col-span-9 align-middle justify-center items-left">
+        <span class="flex">@Data.Description</span>
+    </div>
 </div>
-
-<style>
-    .container {
-        border-top-right-radius: 1em;
-        border-bottom-left-radius: 1em;
-        background-color: lightgray;
-    }
-    
-    .right {
-        float:  right;
-    }
-</style>
