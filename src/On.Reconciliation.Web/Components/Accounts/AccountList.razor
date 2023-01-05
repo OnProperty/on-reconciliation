@@ -1,9 +1,10 @@
 ﻿@using On.Reconciliation.Models.ViewModels
+@using On.Reconciliation.Web.Helpers
 @inject HttpClient Http
 
-<h2>Kontoer</h2>
-
 @{
+    <h1 class="text-white font-bold text-center py-4 text-2xl">@MonthHelper.FullName(DateTime.Now.Month) @DateTime.Now.Year</h1>
+    
     if (accounts == null)
     {
         <p><em>Laster...</em></p>
@@ -12,20 +13,34 @@
     {
         foreach (var account in accounts)
         {
-            <div class="overview-container">
-                <em>@account.BankAccount</em>
-                @account.Entries.Count (<span class="by-rule">@account.Entries.Count(x => x.RuleId != null)</span> <span class="missing">@account.Entries.Count(x => x.GeneralLedgerId == null)</span>)
-            </div>
+            <a href="/statements/@(account.BankAccount)/@(_year)/@(_month)">
+                <div class="overview-container text-white">
+                    <h2 class="font-bold text-xl py-2 bg-blue-800 rounded-md text-center">@BankAccountHelper.Dotted(account.BankAccount)</h2>
+                    <div class=" px-3 py-2">
+                        <p>@account.Entries.Count bevegelser</p> 
+                        @if (account.BookedByRuleCount > 0)
+                        {
+                            <div class="text-green-500">@account.Entries.Count(x => x.RuleId != null) automatisk bokført</div> 
+                        }
+                        @if (account.UnbookedCount > 0)
+                        {
+                            <div class="text-red-500 font-bold">@account.UnbookedCount ikke bokført</div>
+                        }
+                    </div>
+                </div>
+            </a>
         }
     }
 }
 
 @code {
     private AccountOverviewViewModel[]? accounts;
+    private int _year = DateTime.Now.Year;
+    private int _month = DateTime.Now.Month;
 
     protected override async Task OnInitializedAsync()
     {
-        accounts = (await Http.GetFromJsonAsync<AccountOverviewViewModel[]>("http://localhost:7035/Overview/Summaries"))?.ToArray();
+        accounts = (await Http.GetFromJsonAsync<AccountOverviewViewModel[]>($"https://localhost:7203/Overview/Summaries/{_year}/{_month}"))?.ToArray();
     }
 }
 

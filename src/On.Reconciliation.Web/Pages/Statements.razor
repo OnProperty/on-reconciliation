@@ -6,13 +6,17 @@
 
 <PageTitle>Bankavstemming</PageTitle>
 
-<h1 class="text-center text-2xl">@DottedBankAccount(BankAccount)</h1>
-<div class="flex justify-between bg-blue-200 rounded-xl px-10 py-3">
-    <a href="@PreviousMonthLink" class="my-auto text-4xl rounded-xl hover:scale-125 transition ease-in-out duration-300">⬅ @PreviousMonthName</a>
+<h1 class="text-center text-2xl">@BankAccountHelper.Dotted(BankAccount)</h1>
+<div class="grid grid-cols-3 bg-blue-200 rounded-xl px-10 py-3">
+    <a href="@PreviousMonthLink" class="my-auto text-4xl rounded-xl hover:scale-125 hover:translate-x-8 transition ease-in-out duration-300">⬅ @PreviousMonthName</a>
     <h1 class="text-center text-6xl">@Title</h1>
     @if (Date.AddMonths(1) < DateTime.Now)
     {
-        <a href="@NextMonthLink" class="my-auto text-4xl hover:scale-125 transition ease-in-out duration-300">@NextMonthName ➡</a>    
+        <a href="@NextMonthLink" class="my-auto text-4xl text-right hover:scale-125 hover:-translate-x-8 transition ease-in-out duration-300">@NextMonthName ➡</a>    
+    }
+    else
+    {
+        <span></span>
     }
 </div>
 
@@ -120,16 +124,5 @@ else
     private string CreateUrl(DateTime date)
     {
         return $"/statements/{BankAccount}/{date.Year}/{date.Month}";
-    }
-
-    private string DottedBankAccount(string bankAccount)
-    {
-        if (string.IsNullOrEmpty(bankAccount))
-            throw new ArgumentException("bankAccount must have a value");
-
-        if (bankAccount.Length != 11)
-            throw new ArgumentException("bankAccount must have 11 digits");
-        
-        return $"{bankAccount[0..4]}.{bankAccount[5..7]}.{bankAccount[6..]}";
     }
 }

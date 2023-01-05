@@ -26,7 +26,11 @@ public class AccountingClientQueries : IAccountingClientQueries
 
     public string[] GetBankAccounts(int accountingClientId)
     {
-        throw new NotImplementedException();
+        var query = @"SELECT ba.BankAccount
+                        FROM EC_BankAccount ba
+                        JOIN EC_AccountingClient ac ON ac.ContactId = ba.ContactId
+                        WHERE ac.AccountingClientId = @accountingClientId";
+        return _connection.Query<string>(query, new { accountingClientId }).ToArray();
     }
 
     public int GetByBankAccount(string bankAccount)
