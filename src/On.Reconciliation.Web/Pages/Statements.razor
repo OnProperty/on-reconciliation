@@ -3,6 +3,7 @@
 @using On.Reconciliation.Web.Components.Statements;
 @using On.Reconciliation.Web.Helpers
 @inject HttpClient Http
+@inject IConfiguration Configuration
 
 <PageTitle>Bankavstemming</PageTitle>
 
@@ -51,7 +52,7 @@ else
 
 @code {
     private DateTime Date;
-    
+
     [Parameter]
     public string BankAccount { get; set; }
 
@@ -61,7 +62,7 @@ else
     [Parameter]
     public int? Month { get; set; }
 
-    private string Title = "foo";
+    private string Title = "Laster";
     private string PreviousMonthName;
     private string NextMonthName;
     private string PreviousMonthLink;
@@ -83,7 +84,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        statements = (await Http.GetFromJsonAsync<StatementViewModel[]>($"https://localhost:7203/Statement/{BankAccount}/{Year}/{Month}"))?
+        statements = (await Http.GetFromJsonAsync<StatementViewModel[]>($"/Statement/{BankAccount}/{Year}/{Month}"))?
             .OrderByDescending(x => x.Date)
             .ToArray();
 
