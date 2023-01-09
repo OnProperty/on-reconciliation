@@ -32,4 +32,10 @@ public class StatementController: ControllerBase
         var statements = _statementQueries.GetAllEntriesForMonth(bankAccount, year, month);
         return statements.Select(x => x.ToViewModel()).ToList();
     }
+
+    [HttpPost("{bankStatementEntryId}/book")]
+    public void Book(string bankStatementEntryId)
+    {
+        throw new NotImplementedException();
+    }
 }
