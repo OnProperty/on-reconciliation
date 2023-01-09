@@ -1,9 +1,30 @@
 ﻿@using On.Reconciliation.Models.ViewModels
 @using System.Globalization
+
+<div class="relative p-4 grid grid-cols-12 gap-2 @(Data.GeneralLedgerId == null ? "bg-red-300" : "even:bg-gray-100")">
+    <div class="basis-1/8 text-right align-middle px-4 py-1 col-span-2">
+        @Data.Amount?.ToString("C2", norwegian)
+        <span class="text-2xl">@GetStatusEmoji()</span>
+    </div>
+    <div class="text-center">
+        @if (Data.GeneralLedgerId == null)
+        {
+            <button @onclick="ToggleSlideover" class="px-3 text-2xl transition ease-in-out duration-200 rounded-3xl hover:bg-orange-200 hover:scale-150 hover:border-2" alt-text="Bokfør">✍️</button>
+        }
+    </div>
+    <div class="basis-7/8 flex flex-col statement-description col-span-9 align-middle justify-center items-left">
+        <div class="flex">@Data.Description</div>
+        <div class="flex">@Data.PaymentInformation</div>
+    </div>
+    <ReconciliateDialog IsActive="@ShowReconciliationSlideover" Description="@Data.Description" BankStatementEntryId="@Data.BankStatementEntryId" />
+</div>
+
+
 @code {
     [Parameter]
     public StatementViewModel? Data { get; set; }
     private CultureInfo norwegian = CultureInfo.CreateSpecificCulture("nb-NO");
+    private bool ShowReconciliationSlideover = false;
 
     protected override Task OnInitializedAsync()
     {
@@ -20,20 +41,12 @@
         else
             return "✔️";
     }
-}
 
-<div class="p-4 rounded-l grid grid-cols-12 gap-2 @(Data.GeneralLedgerId == null ? "bg-red-300" : "even:bg-gray-100")">
-    <div class="basis-1/8 text-right align-middle px-4 py-1 col-span-2">
-        @Data.Amount?.ToString("C2", norwegian)
-        <span class="text-2xl">@GetStatusEmoji()</span>
-    </div>
-    <div class="text-center">
-        @if (Data.GeneralLedgerId == null)
-        {
-            <button class="px-3 text-2xl transition ease-in-out duration-300 rounded-3xl hover:bg-orange-200 hover:scale-150 hover:border-2" alt-text="Bokfør">✍️</button>
-        }
-    </div>
-    <div class="basis-7/8 flex flex-col statement-description col-span-9 align-middle justify-center items-left">
-        <span class="flex">@Data.Description</span>
-    </div>
-</div>
+    private void ToggleSlideover()
+    {
+        ShowReconciliationSlideover = !ShowReconciliationSlideover;
+        var status = ShowReconciliationSlideover ? "active" : "inactive";
+        Console.WriteLine($"Toggle clicked, dialog is now {status}");
+    }
+
+}

@@ -1,0 +1,76 @@
+﻿<div class="absolute right-0 h-full bg-slate-100 translate-h-0 transition-all ease-in-out duration-300 @visibility">
+    <div id="reconciliation-choice" class="@ReconciliationChoiceVisible flex space-between h-full">
+        <button @onclick="ManualBookingClicked" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">Bokfør manuelt</button>
+        <button @onclick="CreateRuleClicked" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">Opprett ny regel</button>
+    </div>
+    <div id="manual-booking-dialog" class="@ManualBookingVisible flex space-between h-full -translate-y-full">
+        <button @onclick="CancelManualBooking" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">❌ Avbryt</button>
+        <button @onclick="PerformManualBooking" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">✔️ Bekreft manuell bokføring</button>
+    </div>
+    <div id="create-rule-dialog" class="@CreateRuleVisible flex space-between h-full -translate-y-full">
+        <button @onclick="ManualBookingClicked" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">Bokfør manuelt</button>
+        <button @onclick="CreateRuleClicked" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">Opprett ny regel</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Description { get; set; } = "";
+    
+    [Parameter]
+    public int? BankStatementEntryId { get; set; }
+    
+    [Parameter]
+    public bool IsActive
+    {
+        get => _isActive;
+        set
+        {
+            _isActive = value;
+            ToggleVisibilityEntireComponent();
+        }
+    }
+
+    private string visibility = "invisible";
+    private string ReconciliationChoiceVisible = "visible";
+    private string ManualBookingVisible = "invisible";
+    private string CreateRuleVisible = "invisible";
+    private bool _isActive;
+
+    private void ToggleVisibilityEntireComponent()
+    {
+        if (_isActive)
+        {
+            visibility = "opacity-100 w-3/4";
+        }
+        else
+        {
+            visibility = "opacity-0 w-0";
+        }
+    }
+
+    private void ManualBookingClicked()
+    {
+        ReconciliationChoiceVisible = "invisible";
+        ManualBookingVisible = "visible";
+    }
+
+    private void CreateRuleClicked()
+    {
+        CreateRuleVisible = "visible";
+        ReconciliationChoiceVisible = "invisible";
+    }
+
+    private void PerformManualBooking()
+    {
+        // TODO: send request to api for booking
+        Console.WriteLine($"Sending request to book entry with id {BankStatementEntryId}");
+        IsActive = false;
+    }
+
+    private void CancelManualBooking()
+    {
+        ManualBookingVisible = "invisible";
+        ReconciliationChoiceVisible = "visible";
+    }
+}

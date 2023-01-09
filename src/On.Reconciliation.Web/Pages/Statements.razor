@@ -32,7 +32,11 @@ else
         {
             <div class="text-red-600 font-bold">⚠️ @NumberOfUnreconciliatedStatements ikke bokført</div>
         }
-    </div>
+        else
+        {
+            <div class="text-green-600 font-bold">✔️ Avstemt!</div>
+        }
+               </div>
     @foreach (var day in statementGroups)
     {
         <div class="rounded-3xl @GetBackgroundColor(day) my-1">

@@ -6,8 +6,10 @@ namespace On.Reconciliation.Models.ViewModels;
 
 public class StatementViewModel
 {
+    public int? BankStatementEntryId { get; set; }
     public DateTime? Date { get; set; }
     public string? Description { get; set; }
+    public string? PaymentInformation { get; set; }
     public decimal? Amount { get; set; }
     public int? GeneralLedgerId { get; set; }
 }
@@ -20,7 +22,8 @@ public static class StatementViewModelExtensions
         {
             Amount = statementEntry.Amount,
             Date = statementEntry.Timestamp,
-            Description = statementEntry.AdditionalInfo
+            Description = statementEntry.AdditionalInfo,
+            PaymentInformation = statementEntry.PaymentInformationIdentification
         };
     }
     
@@ -28,10 +31,12 @@ public static class StatementViewModelExtensions
     {
         return new StatementViewModel()
         {
+            BankStatementEntryId = statementEntry.Id,
             GeneralLedgerId = statementEntry.GeneralLedgerId,
             Amount = statementEntry.Amount,
             Date = statementEntry.Timestamp,
-            Description = statementEntry.AdditionalInfo
+            Description = statementEntry.AdditionalInfo,
+            PaymentInformation = statementEntry.PaymentInformationIdentification
         };
     }
 }

@@ -22,7 +22,7 @@ public class OverviewController : ControllerBase
         var result = new List<AccountOverviewViewModel>();
         var accountingClientWithBankAccounts = _accountingClientQueries
             .GetAccountingClientsForUser("")
-            .ToDictionary(x => x, y => _accountingClientQueries.GetBankAccounts(y));;
+            .ToDictionary(x => x, y => _accountingClientQueries.GetBankAccounts(y));
         
         foreach (var accountingClient in accountingClientWithBankAccounts)
         {
