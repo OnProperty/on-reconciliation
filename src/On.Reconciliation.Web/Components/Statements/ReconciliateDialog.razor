@@ -3,12 +3,16 @@
 
 <div class="absolute right-0 h-full bg-slate-100 translate-h-0 transition-all ease-in-out duration-300 @visibility">
     <div id="reconciliation-choice" class="@ReconciliationChoiceVisible flex space-between h-full">
+        <div class="flex-auto"></div>
         <button @onclick="ManualBookingClicked" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">Bokfør manuelt</button>
+        <div class="flex-auto"></div>
         <button @onclick="CreateRuleClicked" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">Opprett ny regel</button>
+        <div class="flex-auto"></div>
     </div>
     <div id="manual-booking-dialog" class="@ManualBookingVisible flex space-between h-full -translate-y-full">
-        <button @onclick="CancelManualBooking" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">❌ Avbryt</button>
-        <button @onclick="PerformManualBooking" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">✔️ Bekreft manuell bokføring</button>
+        <ManualBookingDialog OnBooked="BookedHandler" OnCanceled="ManualBookingCanceled"></ManualBookingDialog>
+        @* <button @onclick="CancelManualBooking" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">❌ Avbryt</button> *@
+        @* <button @onclick="PerformManualBooking" disabled="@ManualBookingDisabled" class="disabled:bg-red-100 bg-green-100 disabled:scale-100 flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">✔️ Bekreft manuell bokføring</button> *@
     </div>
     <div id="create-rule-dialog" class="@CreateRuleVisible flex space-between h-full -translate-y-full">
         <button @onclick="ManualBookingClicked" class="flex-auto px-3 text-2xl transition ease-in-out duration-200 rounded-3xl 200 hover:scale-125" alt-text="Bokfør">Bokfør manuelt</button>
@@ -17,6 +21,9 @@
 </div>
 
 @code {
+    [Parameter]
+    public EventCallback OnBooked { get; set; }
+    
     [Parameter]
     public string Description { get; set; } = "";
     
@@ -37,6 +44,7 @@
     private string visibility = "invisible";
     private string ReconciliationChoiceVisible = "visible";
     private string ManualBookingVisible = "invisible";
+    private string ManualBookingDisabled = "disabled";
     private string CreateRuleVisible = "invisible";
     private bool _isActive;
 
@@ -48,8 +56,16 @@
         }
         else
         {
-            visibility = "opacity-0 w-0";
+            Reset();
         }
+    }
+
+    private void Reset()
+    {
+        visibility = "opacity-0 w-0";
+        ManualBookingVisible = "invisible";
+        CreateRuleVisible = "invisible";
+        ReconciliationChoiceVisible = "visible";
     }
 
     private void ManualBookingClicked()
@@ -66,15 +82,23 @@
 
     private void PerformManualBooking()
     {
+        
         // TODO: send request to api for booking
         Console.WriteLine($"Sending request to book entry with id {BankStatementEntryId}");
         Http.PostAsync($"/statement/{BankStatementEntryId}/book", null).Wait();
         IsActive = false;
     }
 
-    private void CancelManualBooking()
+    private async Task BookedHandler()
+    {
+        Reset();
+        await OnBooked.InvokeAsync();
+    }
+
+    private async Task ManualBookingCanceled()
     {
         ManualBookingVisible = "invisible";
         ReconciliationChoiceVisible = "visible";
     }
+
 }

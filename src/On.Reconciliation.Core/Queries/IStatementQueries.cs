@@ -10,6 +10,7 @@ public interface IStatementQueries
     public IEnumerable<EC_BankStatementEntry> GetAllUnmatchedEntries(string bankAccount);
     public IEnumerable<EntryWithStatus> GetAllEntriesForMonth(string bankAccount, int year, int month);
     public IEnumerable<string> GetAllBankAccounts();
+    public BankStatementEntryExtended GetEntryById(int bankStatementEntryId);
 }
 
 public class StatementQueries : IStatementQueries
@@ -58,5 +59,15 @@ public class StatementQueries : IStatementQueries
     {
         var query = "SELECT DISTINCT BankAccount FROM EC_BankStatement";
         return _connection.Query<string>(query);
+    }
+
+    public BankStatementEntryExtended GetEntryById(int bankStatementEntryId)
+    {
+        var query = @"SELECT ac.AccountingClientID, bs.BankAccount, bse.* FROM EC_BankStatementEntry bse
+                        JOIN EC_BankStatement bs ON bs.Id = bse.BankStatementId
+                        JOIN EC_BankAccount ba ON ba.BankAccount = bs.BankAccount
+                        JOIN EC_AccountingCLient ac ON ac.ContactID = ba.ContactId
+                        WHERE bse.Id = @id";
+        return _connection.QuerySingle<BankStatementEntryExtended>(query, new { id = bankStatementEntryId });
     }
 }

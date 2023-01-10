@@ -1,7 +1,63 @@
-﻿<div class="flex h-full">
-    <button class="flex-auto h-full">✔️ Bekreft manuell bokføring</button>
-    <button class="flex-auto h-full">❌ Avbryt</button>
+﻿@inject HttpClient Http
+
+<div class="flex h-full">
+    <select @onchange="Choose">
+        <option value="null" selected>Velg kontonummer:</option>
+        @foreach (var item in AccountNumbers)
+        {
+            <option value="@item">@item</option>
+        }
+    </select>
+    <button class="flex-auto h-full @ConfirmButtonVisible">✔️ Bekreft manuell bokføring</button>
+    <button class="flex-auto h-full" @onclick="CancelClicked">❌ Avbryt</button>
 </div>
 
 @code {
+    private int[] AccountNumbers { get; set; } = new[] { 1920, 1234 };
+
+    private string ConfirmButtonVisible
+    {
+        get => _confirmButtonVisible;
+        set
+        {
+            _confirmButtonVisible = value;
+            Console.WriteLine($"{ChosenAccountNumber} chosen");
+        }
+    }
+
+    private void SetVisibility(bool visible)
+    {
+        ConfirmButtonVisible = visible ? "" : "invisible";
+    }
+
+    private void Choose(ChangeEventArgs obj)
+    {
+        if (int.TryParse(obj.Value.ToString(), out int number))
+        {
+            ChosenAccountNumber = number;
+            SetVisibility(true);
+        }
+        else
+        {
+            SetVisibility(false);
+        }
+    }
+
+    [Parameter]
+    public EventCallback OnBooked { get; set; }
+    [Parameter]
+    public EventCallback OnCanceled { get; set; }
+
+    private int? ChosenAccountNumber;
+    private string _confirmButtonVisible = "invisible";
+
+    private async Task CancelClicked()
+    {
+        await OnCanceled.InvokeAsync();
+    }
+    
+    private async Task Book()
+    {
+        await OnBooked.InvokeAsync();
+    }
 }

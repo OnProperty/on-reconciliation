@@ -23,7 +23,7 @@ public class ReconciliationController : Controller
     }
     
     [HttpGet]
-    public IActionResult Index()
+    public IActionResult AutoMatch()
     {
         var matchCount = 0; 
         var rulesRun = 0;
@@ -40,5 +40,11 @@ public class ReconciliationController : Controller
         rulesRun += _ruleService.RunAllRules();
 
         return Ok($"{matchCount} overføringer avstemt mot bok og {rulesRun} rader bokført etter regler");
+    }
+
+    [HttpGet("AccountNumbers")]
+    public IEnumerable<int> GetAccountNumbers()
+    {
+        return new[] { 1920, 9000 }; // dummy numbers
     }
 }

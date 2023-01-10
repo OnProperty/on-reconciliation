@@ -75,7 +75,7 @@ public class RuleService : IRuleService
             VoucherIdentifier = Guid.NewGuid(),
             AccountNumber = rule.AccountNumber,
             VatCode = _vatQueries.GetVatById(rule.VatCodeId),
-            AccountingClientId = _accountingClientQueries.GetByBankAccount(bankAccount)
+            AccountingClientId = _accountingClientQueries.GetByBankAccount(bankAccount),
         };
     }
 }

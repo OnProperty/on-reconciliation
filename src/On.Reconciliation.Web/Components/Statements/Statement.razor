@@ -1,7 +1,7 @@
 ﻿@using On.Reconciliation.Models.ViewModels
 @using System.Globalization
 
-<div class="relative p-4 grid grid-cols-12 gap-2 @(Data.GeneralLedgerId == null ? "bg-red-300" : "even:bg-gray-100")">
+<div class="relative p-4 grid grid-cols-12 gap-2 @height transition-all ease-in-out duration-200 @(Data.GeneralLedgerId == null ? "bg-red-300" : "even:bg-gray-100")">
     <div class="basis-1/8 text-right align-middle px-4 py-1 col-span-2">
         @Data.Amount?.ToString("C2", norwegian)
         <span class="text-2xl">@GetStatusEmoji()</span>
@@ -25,6 +25,7 @@
     public StatementViewModel? Data { get; set; }
     private CultureInfo norwegian = CultureInfo.CreateSpecificCulture("nb-NO");
     private bool ShowReconciliationSlideover = false;
+    private string height = "h-20"; 
 
     protected override Task OnInitializedAsync()
     {
@@ -45,8 +46,7 @@
     private void ToggleSlideover()
     {
         ShowReconciliationSlideover = !ShowReconciliationSlideover;
-        var status = ShowReconciliationSlideover ? "active" : "inactive";
-        Console.WriteLine($"Toggle clicked, dialog is now {status}");
+        height = ShowReconciliationSlideover ? "h-48" : "h-20";
     }
 
 }

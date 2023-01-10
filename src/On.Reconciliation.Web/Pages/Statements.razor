@@ -23,7 +23,7 @@
 
 @if (statements == null)
 {
-    <p><em>Laster...</em></p>
+    <p class="text-3xl"><em class="animate-pulse">Laster...</em></p>
 }
 else
 {
@@ -81,15 +81,10 @@ else
     {
         ValidateYearAndMonth();
     }
-
+    
     protected override async Task OnParametersSetAsync()
     {
-        statements = (await Http.GetFromJsonAsync<StatementViewModel[]>($"/Statement/{BankAccount}/{Year}/{Month}"))?
-            .OrderByDescending(x => x.Date)
-            .ToArray();
-
-        statementGroups = statements.GroupBy(x => x.Date.Value.Day);
-        
+        statements = null;
         Date = new DateTime(Year!.Value, Month!.Value, 1);
         
         Title = $"{MonthHelper.FullName(Date.Month)} {Year}";
@@ -97,6 +92,11 @@ else
         PreviousMonthLink = CreateUrl(Date.AddMonths(-1));
         NextMonthName = MonthHelper.FullName(Date.Month + 1);
         NextMonthLink = CreateUrl(Date.AddMonths(1));
+        statements = (await Http.GetFromJsonAsync<StatementViewModel[]>($"/Statement/{BankAccount}/{Year}/{Month}"))?
+            .OrderByDescending(x => x.Date)
+            .ToArray();
+        
+        statementGroups = statements.GroupBy(x => x.Date.Value.Day);
         
         await base.OnParametersSetAsync();
     }
